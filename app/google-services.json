@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "951031547954",
+    "project_id": "plants-8b7e3",
+    "storage_bucket": "plants-8b7e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951031547954:android:c0122277d266bbd8f0142b",
+        "android_client_info": {
+          "package_name": "com.hfad.plants"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951031547954-t97k74snu3mftot14958tkqkkg9gs3p2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7ZFUkUDInaTsowTw2Vy4BHi0zCgW9rUc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951031547954-t97k74snu3mftot14958tkqkkg9gs3p2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
