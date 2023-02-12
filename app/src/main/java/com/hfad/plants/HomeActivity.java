@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -48,7 +52,6 @@ public class HomeActivity extends AppCompatActivity {
 
         chooseImage = findViewById(R.id.chooseFile);
         upload = findViewById(R.id.upload);
-        showUploads = findViewById(R.id.textView);
         tag = findViewById(R.id.tag);
         imageView = findViewById(R.id.image);
         progressBar = findViewById(R.id.progressBar);
@@ -70,12 +73,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        showUploads.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+//        showUploads.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openImagesActivity();
+//            }
+//        });
     }
 
     private void openFileChooser() {
@@ -108,17 +111,26 @@ public class HomeActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Handler handler=new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressBar.setProgress(0);
-                                }
-                            },5000);
-                            Toast.makeText(HomeActivity.this,"Upload Successful",Toast.LENGTH_SHORT).show();
-                            Upload upload=new Upload(tag.getText().toString().trim(),taskSnapshot.getUploadSessionUri().toString());
-                            String uploadID=mDatabaseRef.push().getKey();
-                            mDatabaseRef.child(uploadID).setValue(upload);
+//                            Handler handler=new Handler();
+//                            handler.postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    progressBar.setProgress(0);
+//                                }
+//                            },5000);
+//                            Toast.makeText(HomeActivity.this,"Upload Successful",Toast.LENGTH_SHORT).show();
+//                            Upload upload=new Upload(tag.getText().toString().trim(),taskSnapshot.getUploadSessionUri().toString());
+//                            String uploadID=mDatabaseRef.push().getKey();
+//                            mDatabaseRef.child(uploadID).setValue(upload);
+
+                            Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
+                            while(!uriTask.isSuccessful());
+                            Uri downloadUri=uriTask.getResult();
+
+                            Upload upload=new Upload(tag.getText().toString().trim(),downloadUri.toString());
+
+                            String uploadId=mDatabaseRef.push().getKey();
+                            mDatabaseRef.child(uploadId).setValue(upload);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -138,5 +150,25 @@ public class HomeActivity extends AppCompatActivity {
         else{
             Toast.makeText(this,"No file selected",Toast.LENGTH_SHORT).show();
         }
+    }
+    private void openImagesActivity(){
+        Intent intent=new Intent(this,PostsActivity.class);
+        startActivity(intent);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.options_menu,menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.posts:{
+                Intent intent=new Intent(HomeActivity.this,PostsActivity.class);
+                startActivity(intent);
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

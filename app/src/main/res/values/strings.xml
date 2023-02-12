@@ -2,7 +2,7 @@
     <string name="app_name">Plan(t)s</string>
     <string name="signIn">Sign In with Google</string>
     <string name="chooseFile">Choose File</string>
-    <string name="tag">Tag</string>
+    <string name="tag">PlantName</string>
     <string name="upload">Upload</string>
     <string name="showUpload">Show Uploads</string>
 </resources>
